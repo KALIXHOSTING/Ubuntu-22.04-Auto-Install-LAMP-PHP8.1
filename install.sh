@@ -94,7 +94,7 @@ sudo apt install php8.1-fpm php8.1 libapache2-mod-php8.1 php8.1-common php8.1-my
 echo 'done'
 
 echo 'python certbot ssl SET UP'
-sudo apt install python3-certbot-apache
+sudo apt install python3-certbot-apache -y
 echo 'done'
 
 echo 'php7.4 SET UP'
