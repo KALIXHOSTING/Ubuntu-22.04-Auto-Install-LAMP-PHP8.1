@@ -1,197 +1,76 @@
-#! /bin/bash
+#!/bin/bash
 
-echo 'UPDATE'
+# Update the package list
+sudo apt update
 
-sudo apt-get update -y
+# Install Apache
+sudo apt install -y apache2
 
-echo 'done'
+# Install FFmpeg
+sudo apt install -y ffmpeg
 
-echo 'UPGRADE'
+# Add PHP repository
+sudo add-apt-repository -y ppa:ondrej/php
+sudo apt update
 
-sudo apt-get upgrade -y
+# Install PHP 8.1 and necessary extensions
+sudo apt install -y php8.1 php8.1-cli php8.1-fpm php8.1-mysql php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-zip
 
-echo 'done'
+# Install zip and unzip
+sudo apt install -y zip unzip
 
+# Install phpMyAdmin
+sudo apt install -y phpmyadmin
 
-echo 'INSTALL APACHE 2'
+# Configure Apache for phpMyAdmin
+sudo echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 
-sudo apt install -y apache2 apache2-utils
-
-echo 'done'
-
-
-echo 'START APACHE 2'
-
-sudo systemctl start apache2
-
-echo 'done'
-
-echo 'ENABLE APACHE 2'
-
-sudo systemctl enable apache2
-
-echo 'done'
-
-echo 'PORT APACHE 2'
-
-sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-
-
-echo 'done'
-echo 'PORT 443 APACHE 2'
-
-sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-
-
-echo 'done'
-echo 'CHMOD APACHE 2'
-
-sudo chown www-data:www-data /var/www/html/ -R
-
-
-
-echo 'done'
-
-echo 'RELOAD APACHE 2'
-
-sudo systemctl reload apache2
-
-echo 'done'
-
-echo 'MARIADB'
-
-sudo apt install mariadb-server mariadb-client -y
-
-echo 'done'
-
-echo 'MARIADB start'
-
-sudo systemctl start mariadb
-
-echo 'done'
-
-echo 'MARIADB ENABLE'
-
-sudo systemctl enable mariadb
-
-
-echo 'done'
-
-echo 'MARIADB LOGIN SET UP'
-
-sudo mysql_secure_installation
-
-
-echo 'done'
-
-
-
-echo 'php8.1 SET UP'
-
-sudo apt install php8.1-fpm php8.1 libapache2-mod-php8.1 php8.1-common php8.1-mysql php8.1-xml php8.1-xmlrpc php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-imap php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-intl php8.1-bcmath unzip -y
-
-
-echo 'done'
-
-echo 'python certbot ssl SET UP'
-sudo apt install python3-certbot-apache -y
-echo 'done'
-
-echo 'php7.4 SET UP'
-
+# Restart Apache
 sudo systemctl restart apache2
 
+# Install MariaDB
+sudo apt install -y mariadb-server
 
-echo 'done'
+# Secure MariaDB installation
+sudo mysql_secure_installation
 
-echo 'PHPMYADMIN SET UP'
+# Install Composer
+sudo apt install -y composer
 
-sudo apt-get install phpmyadmin -y
+# Install Let's Encrypt certbot
+sudo apt install -y certbot python3-certbot-apache
 
+# Obtain SSL certificate using certbot
+sudo certbot --apache
 
-echo 'done'
+# Restart Apache
+sudo systemctl restart apache2
 
-echo 'FFMPEG SET UP'
+# Install iptables
+sudo apt install -y iptables
 
-sudo apt-get install ffmpeg -y
+# Configure iptables rules
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A INPUT -j DROP
 
+# Save iptables rules
+sudo sh -c "iptables-save > /etc/iptables/rules.v4"
 
-echo 'done'
+# Install ufw
+sudo apt install -y ufw
 
-echo 'rar SET UP'
+# Configure ufw rules
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 22
+sudo ufw allow 21
 
-sudo apt-get install rar -y
+# Enable ufw
+sudo ufw enable
 
-
-echo 'done'
-
-echo 'unrar SET UP'
-
-sudo apt-get install unrar -y
-
-
-echo 'done'
-
-echo 'curl SET UP'
-
-sudo apt-get install curl -y
-
-
-echo 'done'
-echo 'save iptables SET UP'
-
-sudo /sbin/iptables-save > /etc/iptables/rules.v4
-
-
-echo 'done'
-
-echo 'PHPINFO'
-
-echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
-
-echo 'done'
-
-echo 'COMPOSER SET UP'
-
-sudo apt install php-cli unzip -y
-
-
-echo 'done'
-
-
-echo 'COMPOSER SET UP'
-
-curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
-
-
-echo 'done'
-
-echo 'COMPOSER SET UP'
-
-HASH=`curl -sS https://composer.github.io/installer.sig`
-
-
-echo 'done'
-
-echo 'COMPOSER SET UP'
-
-php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-
-
-echo 'done'
-echo 'COMPOSER SET UP'
-
-sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
-echo 'done'
-
-echo 'COMPOSER VERIFY SET UP'
-
-composer
-
-echo 'done'
-
-
-
-
-
+# Install rar and unrar
+sudo apt install -y rar unrar
