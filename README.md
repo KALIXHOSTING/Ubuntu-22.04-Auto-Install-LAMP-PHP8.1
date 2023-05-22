@@ -1,4 +1,4 @@
-![Logo](https://kalixhosting.com/img/kalixhostinglogo.png)
+![Logo](https://kalixhosting.com/img/kalixhostinggitlogo.png)
 
 # Ubuntu-22.04-Auto-Install-LAMP-PHP8.1
 APACHE PHP 8.1 PHPMYADMIN FFMPEG COMPOSER 
