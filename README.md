@@ -11,5 +11,5 @@ This script is designed to automate the installation of Apache, FFmpeg, PHP 8.1,
 1. Ensure you have administrative privileges on your Ubuntu 22.04 system.
 2. Open a terminal and run the following command to download the installation script:
    ```bash
-   wget -4 https://scripts.kalixhosting.com/ubuntu/lampstacks22.04/ -O install.sh && bash install.sh
+   wget -4 https://scripts.kalixhosting.com/ubuntu/16-22/lamp8.1/ -O install.sh && bash install.sh
     ```
