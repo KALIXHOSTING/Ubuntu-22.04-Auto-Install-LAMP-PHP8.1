@@ -12,9 +12,14 @@ sudo apt install -y ffmpeg
 # Add PHP repository
 sudo add-apt-repository -y ppa:ondrej/php
 sudo apt update
+apt-add-repository universe
 
 # Install PHP 8.1 and necessary extensions
-sudo apt install -y php8.1 php8.1-cli php8.1-fpm php8.1-mysql php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-zip
+sudo apt install -y php8.1 php8.1-{common,cli,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip}  tar unzip git redis-server
+
+
+
+
 
 # Install zip and unzip
 sudo apt install -y zip unzip
@@ -35,7 +40,7 @@ sudo apt install -y mariadb-server
 sudo mysql_secure_installation
 
 # Install Composer
-sudo apt install -y composer
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Let's Encrypt certbot
 sudo apt install -y certbot python3-certbot-apache
